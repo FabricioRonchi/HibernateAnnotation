@@ -57,24 +57,7 @@ public class UserDAO extends GenericDAO {
     protected String getNamedQueryToFindRoles() {
         return "ROLES.find.rolesUser";
     }
-    
-    public List<Relacionamento> findRoles(User user) throws Exception {
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
-            Query q = session.getNamedQuery(getNamedQueryToFindRoles());
-            q.setString("user", Integer.toString(user.getId()));
-            List lst = q.list();
-            session.getTransaction().commit();
-            return lst;
-        } catch (HibernateException e) {
-            throw new Exception(e.getCause().getMessage());
-        } finally {
-            releaseSession(session);
-        }
         
-    }
-    
    public boolean hasRole(Role role, User user) throws Exception {
         try {
             boolean retorno = false;
