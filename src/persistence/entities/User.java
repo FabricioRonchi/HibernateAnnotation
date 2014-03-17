@@ -24,12 +24,6 @@ import javax.persistence.Table;
     @NamedQuery(name = "user.count.all", query = "SELECT COUNT(o.id) FROM User o"),
     @NamedQuery(name = "user.remove.all", query = "DELETE FROM User o"),
     @NamedQuery(name = "user.find.range", query = "SELECT o FROM User o WHERE o.id BETWEEN :minId AND :maxId"),
-    @NamedQuery(name = "user.remove.role", query = "DELETE FROM Relacionamento o WHERE o.id=:role"),
-    @NamedQuery(name = "user.has.temrole", query = "SELECT o FROM Relacionamento o WHERE o.regra=:role and o.user=:user"),
-    @NamedQuery(name = "ROLES.find.rolesUser", query = "SELECT o FROM Relacionamento o WHERE o.user=:user")        
-        
-        
-        
 })
 
 public class User implements Serializable {    

@@ -24,8 +24,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "ROLES.find.all", query = "SELECT o FROM Role o"),
     @NamedQuery(name = "ROLES.count.all", query = "SELECT COUNT(o.id) FROM Role o"),
     @NamedQuery(name = "ROLES.remove.all", query = "DELETE FROM Role o"),
-    @NamedQuery(name = "ROLES.find.range", query = "SELECT o FROM Role o WHERE o.id BETWEEN :minId AND :maxId"),
-    @NamedQuery(name = "ROLES.find.user", query = "SELECT o FROM Relacionamento o WHERE o.regra=:role")        
+    @NamedQuery(name = "ROLES.find.range", query = "SELECT o FROM Role o WHERE o.id BETWEEN :minId AND :maxId"),    
 })
 public class Role implements Serializable {    
     @Id
