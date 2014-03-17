@@ -16,10 +16,9 @@
     <!-- Echo all executed SQL to stdout -->
     <property name="show_sql">true</property>
     <!-- Drop and re-create the database schema on startup -->
-    <property name="hbm2ddl.auto">none</property>
+    <property name="hbm2ddl.auto">create</property>
     <!-- Mapping files -->
     <mapping class="persistence.entities.User"/>
     <mapping class="persistence.entities.Role"/>
-    <mapping class="persistence.entities.Relacionamento"/>
   </session-factory>
 </hibernate-configuration>

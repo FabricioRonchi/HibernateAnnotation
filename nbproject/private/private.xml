@@ -3,10 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/build/generated-sources/ap-source-output/persistence/entities/Relacionamento_.java</file>
-            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/build/generated-sources/ap-source-output/persistence/entities/Role_.java</file>
-            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/build/generated-sources/ap-source-output/persistence/entities/Teste_.java</file>
-            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/build/generated-sources/ap-source-output/persistence/entities/User_.java</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/persistence/entities/User.java</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/hibernate.cfg.xml</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/persistence/entities/Role.java</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/persistence/entities/HibernateUtil.java</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/persistence/entities/UserDAO.java</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/persistence/entities/IUser.java</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/persistence/entities/GenericDAO.java</file>
+            <file>file:/C:/Users/Fabricio/Projetos/HibernateAnnotation/src/TestarPersistence.java</file>
         </group>
     </open-files>
 </project-private>

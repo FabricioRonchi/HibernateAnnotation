@@ -2,11 +2,14 @@ package persistence.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -33,6 +36,9 @@ public class Role implements Serializable {
     private int id;
     @Column(name = "NAME")
     private String name;
+    
+   @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
+    private Set<User> user;
 
     public Role() {
         setId(0);

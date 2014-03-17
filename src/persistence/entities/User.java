@@ -1,11 +1,16 @@
 package persistence.entities;
 
 import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -33,6 +38,12 @@ public class User implements Serializable {
     private int id;
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+    
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "userrole", joinColumns = {
+        @JoinColumn(name = "userid", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "roleid", referencedColumnName = "id")})
+    private Set<Role> roles;
 
     public User() {
         setId(0);
