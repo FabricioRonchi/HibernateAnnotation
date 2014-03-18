@@ -31,24 +31,28 @@ import javax.persistence.Table;
 })
 public class Role implements Serializable {    
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")    
-    private int id;
+    private Long id;
     @Column(name = "NAME")
     private String name;
     
    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
-    private Set<User> user;
+    private Set<User> users;
+   
+   public Set<User> getUsers() {
+        return this.users;
+    }
 
-    public Role() {
-        setId(0);
+    public void setUsers(Set<User> user) {
+        this.users = user;
     }
     
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

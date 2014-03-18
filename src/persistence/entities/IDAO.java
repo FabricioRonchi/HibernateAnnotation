@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface IDAO {
 
+    void update(Object o) throws Exception;
+    
     Long countAll() throws Exception;
 
     Object create(Object o) throws Exception;
@@ -17,7 +19,7 @@ public interface IDAO {
 
     List findAll() throws Exception;
 
-    Object findById(Integer theId) throws Exception;
+    Object findById(Long theId) throws Exception;
 
     Object findByName(String theName) throws Exception;
 

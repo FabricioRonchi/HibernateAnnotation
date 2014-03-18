@@ -3,6 +3,7 @@ package persistence.entities;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  *
@@ -57,15 +58,20 @@ public class UserDAO extends GenericDAO {
     protected String getNamedQueryToFindRoles() {
         return "ROLES.find.rolesUser";
     }
+    
+    protected String getNameQueryToFindUser() {
+        return "user.find.role";
+    }
         
    public boolean hasRole(Role role, User user) throws Exception {
+       Session session = null;
         try {
             boolean retorno = false;
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Query q = session.getNamedQuery(getNamedQueryToTemRole());
-            q.setString("role", Integer.toString(role.getId()));
-            q.setString("user", Integer.toString(user.getId()));
+            q.setParameter("role", role.getId());
+            q.setParameter("user", user.getId());
             List lst = q.list();
             session.getTransaction().commit();
             if(lst.size() > 0){
@@ -81,10 +87,11 @@ public class UserDAO extends GenericDAO {
     }
             
     public void removeRole(User user, Role role) throws Exception {
+        Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             Query q = session.getNamedQuery(getNamedQueryToRemoveRoleUser());
-            q.setString("role", Integer.toString(role.getId()));
+            q.setParameter("role", role.getId());
             q.executeUpdate();
         } catch (HibernateException e) {
             throw new Exception(e.getCause().getMessage());
@@ -92,5 +99,5 @@ public class UserDAO extends GenericDAO {
             releaseSession(session);
         }
     }
-    
+       
 }

@@ -2,9 +2,9 @@ package persistence.entities;
 
 import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,31 +29,37 @@ import javax.persistence.Table;
     @NamedQuery(name = "user.count.all", query = "SELECT COUNT(o.id) FROM User o"),
     @NamedQuery(name = "user.remove.all", query = "DELETE FROM User o"),
     @NamedQuery(name = "user.find.range", query = "SELECT o FROM User o WHERE o.id BETWEEN :minId AND :maxId"),
+    @NamedQuery(name = "user.find.role", query = "SELECT o FROM User o inner join o.roles u WHERE u.id = :id"),
 })
 
 public class User implements Serializable {    
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")    
-    private int id;
+    private Long id;
+    
     @Column(name = "name", nullable = false, unique = true)
     private String name;
     
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "userrole", joinColumns = {
         @JoinColumn(name = "userid", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "roleid", referencedColumnName = "id")})
     private Set<Role> roles;
+    
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
-    public User() {
-        setId(0);
+    public void setRoles(Set<Role> role) {
+        this.roles = role;
     }
     
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

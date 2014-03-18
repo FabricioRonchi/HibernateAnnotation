@@ -12,19 +12,19 @@ import org.hibernate.Session;
  */
 public abstract class GenericDAO implements IDAO {
 
-    protected Session session;
 
     @Override
     public Object create(Object o) throws Exception {
+        Session session = null;
         try {
             session = obtainSession();
             session.beginTransaction();
-            session.save(o);
-            session.flush();
+            session.persist(o);
             session.getTransaction().commit();
             return o;
         } catch (HibernateException e) {
             session.getTransaction().rollback();
+            e.printStackTrace();
             throw new Exception(e.getCause().getMessage());
         } finally {
             releaseSession(session);
@@ -32,23 +32,21 @@ public abstract class GenericDAO implements IDAO {
     }
 
     @Override
-    public void save(Object o) throws Exception {
+    public void save(Object o) {
+        Session session = obtainSession();
         try {
-            session = obtainSession();
             session.beginTransaction();
-            session.update(o);
-            session.flush();
+            session.merge(o);            
             session.getTransaction().commit();
         } catch (HibernateException e) {
             session.getTransaction().rollback();
-            throw new Exception(e.getCause().getMessage());
-        } finally {
-            releaseSession(session);
-        }
+            e.printStackTrace();
+        } 
     }
 
     @Override
     public void delete(Object o) throws Exception {
+        Session session = null;
         try {
             session = obtainSession();
             session.beginTransaction();
@@ -61,17 +59,17 @@ public abstract class GenericDAO implements IDAO {
             releaseSession(session);
         }
     }
-
+    
     @Override
-    public Object findById(Integer theId) throws Exception {
+    public void update(Object o) throws Exception {
+        Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            //Query q = session.getNamedQuery("id.igual");
-            Query q = session.getNamedQuery(getNamedQueryToFindById());
-            q.setString("id", theId.toString());
-            Object o = q.uniqueResult();
-            return o;
+            session = obtainSession();
+            session.beginTransaction();
+            session.persist(o);
+            session.getTransaction().commit();
         } catch (HibernateException e) {
+            session.getTransaction().rollback();
             throw new Exception(e.getCause().getMessage());
         } finally {
             releaseSession(session);
@@ -79,7 +77,25 @@ public abstract class GenericDAO implements IDAO {
     }
 
     @Override
+    public Object findById(Long theId) {
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query q = session.getNamedQuery(getNamedQueryToFindById());
+            q.setParameter("id", theId);
+            Object o = q.uniqueResult();
+            return o;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        } finally {
+            releaseSession(session);
+        }
+        return null;
+    }
+
+    @Override
     public Object findByName(String theName) throws Exception {
+        Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             //Query q = session.getNamedQuery("name.igual");
@@ -96,6 +112,7 @@ public abstract class GenericDAO implements IDAO {
 
     @Override
     public List findAll() throws Exception {
+        Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -113,6 +130,7 @@ public abstract class GenericDAO implements IDAO {
 
     @Override
     public List list(Integer firstResult, Integer maxResults) throws Exception {
+        Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -131,6 +149,7 @@ public abstract class GenericDAO implements IDAO {
 
     @Override
     public Long countAll() throws Exception {
+        Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -148,10 +167,10 @@ public abstract class GenericDAO implements IDAO {
 
     @Override
     public void removeAll() throws Exception {
+        Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-            //Query q = session.getNamedQuery("count.all");
             Query q = session.getNamedQuery(getNamedQueryToRemoveAll());
             q.executeUpdate();
             session.getTransaction().commit();
@@ -167,7 +186,6 @@ public abstract class GenericDAO implements IDAO {
     }
 
     protected void releaseSession(Session session) {
-        // Do nothing...
     }
 
     /*

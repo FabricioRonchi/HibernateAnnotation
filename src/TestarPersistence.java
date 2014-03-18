@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import persistence.entities.Role;
 import persistence.entities.RoleDAO;
 import persistence.entities.User;
@@ -12,54 +14,38 @@ public class TestarPersistence {
             //showAllUser();
             //createRoles();
             //showAllRoles();                        
-            //adicionarRole(); 
+            adicionarRole(); 
             //buscarRole();
             //removeRole();
             //temRole();     
         } catch (Exception ex) {
-            System.out.println("Ocorreu algum erro: " + ex);
+            ex.printStackTrace();
         }
         
     }
     
     private static void createUsers() throws Exception {
-        System.out.println("Criando usuários...");
         UserDAO dao = new UserDAO();
-        User admin = (User) dao.getNewInstance();
-        admin.setName("Administrador155");
-
-        User guest = (User) dao.getNewInstance();
-        guest.setName("Convidado155");
-        
-        User user = (User) dao.getNewInstance();
-        user.setName("Ayrton Senna155");
-
-        dao.create(admin);
-        dao.create(guest);
-        dao.create(user);
-
-        System.out.print(" OK!");
-
+        //dao.removeAll();
+        User f1 = (User) dao.getNewInstance();
+        User f2 = (User) dao.getNewInstance();
+        User f3 = (User) dao.getNewInstance();
+        f1.setName("Diego Cavalieri");        
+        f2.setName("Fred");      
+        f3.setName("Walter");
+        dao.save(f1);
+        dao.save(f2);
+        dao.save(f3);
     } 
     
     private static void createRoles() throws Exception {
-        System.out.println("Criando Regras...");
-        RoleDAO dao = new RoleDAO();
-        Role role1 = (Role) dao.getNewInstance();
-        role1.setName("Super Usuário");
-
-        Role role2 = (Role) dao.getNewInstance();
-        role2.setName("Administrador");
-        
-        Role role3 = (Role) dao.getNewInstance();
-        role3.setName("Representante");
-
-        dao.create(role1);
-        dao.create(role2);
-        dao.create(role3);
-
-        System.out.print(" OK!");
-
+        RoleDAO role = new RoleDAO(); 
+        Role role1 = (Role) role.getNewInstance();
+        Role role2 = (Role) role.getNewInstance();
+        role1.setName("Administrador");       
+        role2.setName("Super Usuário");
+        role.save(role1);
+        role.save(role2);
     } 
     
     private static void showAllUser() throws Exception {         
@@ -71,12 +57,39 @@ public class TestarPersistence {
         
         for (int i=0; i<users.size(); i++) {
             o = (User) users.get(i);
-            System.out.println("Id: " + o.getId() + " - " +  "Nome: " + o.getName());
+            System.out.println("Id: " + o.getId() + " - " +  "Nome: " + o.getName()+  " - Regras: " + o.getRoles());
         }                
         
         User admin = (User) dao.getNewInstance();       
         
-    }    
+    }  
+    
+    private static void adicionarRole() throws Exception {                       
+        //createUsers();
+        //createRoles();
+        Set setRole1 = new HashSet();
+        RoleDAO role = new RoleDAO();
+        Role role1 = (Role) role.findById(1L);
+        Role role2 = (Role) role.findById(2L);        
+        setRole1.add(role1);
+        setRole1.add(role2);        
+        Set setRoles2 = new HashSet();
+        setRoles2.add(role1);
+        UserDAO dao = new UserDAO();
+        User f1 = (User) dao.findById(1L);
+        User f2 = (User) dao.findById(2L);
+        User f3 = (User) dao.findById(3L);
+        f1.setRoles(setRole1);
+        f2.setRoles(setRoles2);
+        f3.setRoles(setRole1);       
+        dao.save(f1);
+        showAllUser();      
+        dao.save(f2);
+        showAllUser();
+        dao.save(f3);
+        showAllUser();        
+        buscarRole(role1);          
+    }  
 
      private static void showAllRoles() throws Exception {         
         RoleDAO dao = new RoleDAO();        
@@ -87,7 +100,7 @@ public class TestarPersistence {
         
         for (int i=0; i<users.size(); i++) {
             o = (Role) users.get(i);
-            System.out.println("Id: " + o.getId() + " - " +  "Regra: " + o.getName());
+            System.out.println("Id: " + o.getId() + " - " +  "Regra: " + o.getName()+ " - " +  "Usuários: " + o.getUsers());
         }                
         
         Role admin = (Role) dao.getNewInstance();       
@@ -95,19 +108,25 @@ public class TestarPersistence {
     }
      
      private static void removeRole() throws Exception {                        
-        UserDAO userd = new UserDAO();
-        RoleDAO roled = new RoleDAO();
-        Role role = (Role) roled.findById(2); 
-        User user = (User) userd.findById(2);         
-        userd.removeRole(user, role);
-        
+        RoleDAO roledao = new RoleDAO();
+        roledao.removeAll();        
+    } 
+     
+     private static void buscarRole(Role role) throws Exception {                                       
+        RoleDAO dao = new RoleDAO();
+        ArrayList roles = (ArrayList) dao.findUser(role);
+        User o;
+        for (int i = 0; i < roles.size(); i++) {
+            o = (User) roles.get(i);
+            System.out.println("Id: " + o.getId() + " - " +  "Nome: " + o.getName()+  " - Regras: " + o.getRoles());
+        }      
     } 
      
      private static void temRole() throws Exception {                        
         UserDAO userd = new UserDAO();
         RoleDAO roled = new RoleDAO();
-        Role role = (Role) roled.findById(2); 
-        User user = (User) userd.findById(2);         
+        Role role = (Role) roled.findById(2L); 
+        User user = (User) userd.findById(2L);         
         boolean rel = userd.hasRole(role, user);   
         if(rel == true){
             System.err.println("Tem uma regra pra esse Usuário!");
